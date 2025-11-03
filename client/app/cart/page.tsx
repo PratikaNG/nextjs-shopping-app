@@ -2,11 +2,11 @@
 import PaymentForm from '@/components/PaymentForm';
 import ShippingForm from '@/components/ShippingForm';
 import useCartStore from '@/stores/cartStore';
-import { CartItemsType, ShippingFormInputs } from '@/types';
+import {  ShippingFormInputs } from '@/types';
 import {  ArrowRight, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 
 const steps = [
     {id:1,title:"Shopping Cart"},
@@ -21,6 +21,7 @@ const CartPage = () => {
     const [shippingForm,setShippingForm] = useState<ShippingFormInputs>()
     const {cart,removeFromCart} = useCartStore()
   return (
+    
     <div className='flex flex-col gap-8 items-center justify-center mt-12'>
       {/* title */}
       <h1 className='font-medium text-2xl'>Your Shopping Cart</h1>
@@ -38,6 +39,7 @@ const CartPage = () => {
         {/* steps */}
         <div className='w-full md:w-7/12 shadow-lg border border-gray-100 p-8 rounded-lg flex flex-col gap-8'>
         {/* logic:-  {activeStep === 1 ? ("products") : activeStep === 2 ? <ShippingForm/> : activeStep === 3 && shippingForm ? <PaymentForm/> : <p className='text-sm text-gray-500'>Please fill in the shipping form to continue.</p>} */}
+        <Suspense fallback={<div>Loading cart...</div>}>
         {activeStep === 1 ? (cart.map((item)=>
         
         // single cart item
@@ -65,8 +67,9 @@ const CartPage = () => {
                 <Trash2 className='w-3 h-3'/>
             </button>
         </div>)) : activeStep === 2 ? <ShippingForm setShippingForm={setShippingForm}/> : activeStep === 3 && shippingForm ? <PaymentForm/> : <p className='text-sm text-gray-500'>Please fill in the shipping form to continue.</p>}
+        </Suspense>
         </div>
-
+        
         {/* details */}
         <div className='w-full md:w-5/12 shadow-lg border border-gray-100 p-8 rounded-lg flex flex-col gap-8 h-max'>
         <h3 className='font-medium text-md'>Card Details</h3>
