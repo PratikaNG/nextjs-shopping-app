@@ -14,7 +14,7 @@ const steps = [
     {id:3,title:"Payment Method"},
 ]
 
-const CartPage = () => {
+function CartContent() {
     const searchParams = useSearchParams()
     const router = useRouter()
     const activeStep = parseInt(searchParams.get("step") || "1")
@@ -39,7 +39,7 @@ const CartPage = () => {
         {/* steps */}
         <div className='w-full md:w-7/12 shadow-lg border border-gray-100 p-8 rounded-lg flex flex-col gap-8'>
         {/* logic:-  {activeStep === 1 ? ("products") : activeStep === 2 ? <ShippingForm/> : activeStep === 3 && shippingForm ? <PaymentForm/> : <p className='text-sm text-gray-500'>Please fill in the shipping form to continue.</p>} */}
-        <Suspense fallback={<div>Loading cart...</div>}>
+        
         {activeStep === 1 ? (cart.map((item)=>
         
         // single cart item
@@ -67,7 +67,6 @@ const CartPage = () => {
                 <Trash2 className='w-3 h-3'/>
             </button>
         </div>)) : activeStep === 2 ? <ShippingForm setShippingForm={setShippingForm}/> : activeStep === 3 && shippingForm ? <PaymentForm/> : <p className='text-sm text-gray-500'>Please fill in the shipping form to continue.</p>}
-        </Suspense>
         </div>
         
         {/* details */}
@@ -103,7 +102,15 @@ const CartPage = () => {
   )
 }
 
-export default CartPage
+export default function CartPage() {
+  return (
+    <Suspense fallback={<div>Loading cart...</div>}>
+      <CartContent />
+    </Suspense>
+  );
+}
+
+
 // TEMPORARY
 // const cartItems: CartItemsType = [
 //   {
